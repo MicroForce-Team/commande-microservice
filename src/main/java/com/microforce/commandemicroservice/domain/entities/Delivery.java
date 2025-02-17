@@ -4,7 +4,7 @@ import com.microforce.commandemicroservice.domain.enums.DeliveryStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +16,6 @@ public class Delivery {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     private String trackingNumber;
