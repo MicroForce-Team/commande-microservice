@@ -4,6 +4,8 @@ import com.microforce.commandemicroservice.domain.enums.DeliveryStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 
 @Getter
 @Setter
@@ -13,7 +15,7 @@ import lombok.*;
 public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
 
     @OneToOne
     private Order order;

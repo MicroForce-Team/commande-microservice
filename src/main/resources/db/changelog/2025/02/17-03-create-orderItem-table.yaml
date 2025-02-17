@@ -12,10 +12,10 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_orderitem
                   name: id
-                  type: BIGINT
+                  type: UUID
               - column:
                   name: order_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
               - column:

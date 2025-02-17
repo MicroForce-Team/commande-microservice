@@ -12,7 +12,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_order
                   name: id
-                  type: BIGINT
+                  type: UUID
               - column:
                   name: reference
                   type: VARCHAR(255)
@@ -27,6 +27,11 @@ databaseChangeLog:
               - column:
                   name: status
                   type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
                   constraints:
                     nullable: false
             tableName: orders

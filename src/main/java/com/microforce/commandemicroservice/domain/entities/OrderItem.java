@@ -15,7 +15,7 @@ import java.util.UUID;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private Long id;
+    private UUID id;
 
     @ManyToOne
     private Order order;
