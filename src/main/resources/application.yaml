@@ -1,1 +1,22 @@
-spring.application.name=commande-microservice
+server:
+  port: 8090
+
+spring:
+  application:
+    name: users-management
+
+  docker:
+    compose:
+      lifecycle-management: start_only
+      file: src/main/docker/compose.yaml
+      enabled: true
+  liquibase:
+    enabled: true
+    change-log: db/changelog/master.yaml
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
