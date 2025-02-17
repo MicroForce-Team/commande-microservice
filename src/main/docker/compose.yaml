@@ -1,0 +1,11 @@
+name: order-microservice
+services:
+  postgres:
+    container_name: order-microservice
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=order-microservice'
+      - 'POSTGRES_PASSWORD=microservice'
+      - 'POSTGRES_USER=microservice'
+    ports:
+      - '5437:5432'
