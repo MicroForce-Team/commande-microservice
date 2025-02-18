@@ -1,1 +1,27 @@
-spring.application.name=commande-microservice
+server:
+  port: 8090
+
+spring:
+  application:
+    name: order-microservice
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  docker:
+    compose:
+      lifecycle-management: start_only
+      file: src/main/docker/compose.yaml
+      enabled: true
+  liquibase:
+    enabled: true
+    change-log: db/changelog/master.yaml
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

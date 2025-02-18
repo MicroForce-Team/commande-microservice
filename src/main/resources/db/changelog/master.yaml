@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/2025/02/17-01-create-order-table.yaml
+  - include:
+      file: db/changelog/2025/02/17-02-create-delivery-table.yaml
+  - include:
+      file: db/changelog/2025/02/17-03-create-orderItem-table.yaml

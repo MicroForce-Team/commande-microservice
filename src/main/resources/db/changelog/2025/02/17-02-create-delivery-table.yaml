@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1739791626794-1
+      author: IBTISSAM
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_delivery
+                  name: id
+                  type: UUID
+              - column:
+                  name: order_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tracking_number
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+            tableName: delivery
+  - changeSet:
+      id: 1739791626794-4
+      author: IBTISSAM
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: order_id
+            constraintName: uc_delivery_order
+            tableName: delivery
+  - changeSet:
+      id: 1739791626794-5
+      author: IBTISSAM
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: delivery
+            constraintName: FK_DELIVERY_ON_ORDER
+            referencedColumnNames: id
+            referencedTableName: orders
+            onDelete: CASCADE
