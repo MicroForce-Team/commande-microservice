@@ -34,4 +34,9 @@ databaseChangeLog:
                   type: UUID
                   constraints:
                     nullable: false
+              - column:
+                  name: total_amount
+                  type: BIGINT
+                  constraints:
+                    nullable: false
             tableName: orders

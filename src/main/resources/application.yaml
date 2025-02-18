@@ -5,6 +5,11 @@ spring:
   application:
     name: order-microservice
 
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
   docker:
     compose:
       lifecycle-management: start_only
@@ -13,13 +18,6 @@ spring:
   liquibase:
     enabled: true
     change-log: db/changelog/master.yaml
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
 
 eureka:
   instance:

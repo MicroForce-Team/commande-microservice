@@ -6,7 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,5 +24,15 @@ public class OrderItem {
 
     private Integer quantity;
 
-    private BigDecimal price;
+    private Long price;
+
+    private Long subtotal;
+
+    @PrePersist
+    @PreUpdate
+    private void calculateSubtotal() {
+        if (price != null && quantity != null) {
+            subtotal = price * quantity;
+        }
+    }
 }
