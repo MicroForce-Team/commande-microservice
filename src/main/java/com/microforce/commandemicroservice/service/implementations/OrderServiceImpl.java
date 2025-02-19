@@ -37,10 +37,10 @@ public class OrderServiceImpl implements OrderService {
                 .orderItems(new ArrayList<OrderItem>())
                 .build();
 
-        long totalAmount = 0;
+        long totalAmount = 0L;
         for (OrderItem item : orderRequest.getOrderItems()) {
             order.addOrderItem(item);
-            totalAmount += item.getSubtotal();
+            totalAmount += (item.getPrice() * item.getQuantity());
         }
         order.setTotalAmount(totalAmount);
 

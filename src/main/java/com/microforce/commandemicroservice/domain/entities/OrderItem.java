@@ -32,7 +32,7 @@ public class OrderItem {
     @PreUpdate
     private void calculateSubtotal() {
         if (price != null && quantity != null) {
-            subtotal = price * quantity;
+            this.subtotal = price * quantity;
         }
     }
 }
