@@ -1,5 +1,6 @@
 package com.microforce.commandemicroservice.web.error;
 
+import com.microforce.commandemicroservice.exception.OrderDeletionException;
 import com.microforce.commandemicroservice.exception.OrderNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(OrderDeletionException.class)
+    public ResponseEntity<String> handleOrderDeletionException(OrderDeletionException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
 }

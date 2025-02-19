@@ -12,4 +12,5 @@ public interface OrderService {
     OrderResponse createOrder(OrderRequest orderRequest);
     Page<OrderResponse> getAllOrders(Pageable pageable);
     OrderResponse getOrderById(UUID id);
+    public void deleteOrder(UUID id);
 }

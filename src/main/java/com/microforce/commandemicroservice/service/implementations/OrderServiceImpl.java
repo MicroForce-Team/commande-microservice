@@ -10,6 +10,7 @@ import com.microforce.commandemicroservice.domain.entities.Order;
 import com.microforce.commandemicroservice.domain.entities.OrderItem;
 import com.microforce.commandemicroservice.domain.enums.DeliveryStatus;
 import com.microforce.commandemicroservice.domain.enums.OrderStatus;
+import com.microforce.commandemicroservice.exception.OrderDeletionException;
 import com.microforce.commandemicroservice.exception.OrderNotFoundException;
 import com.microforce.commandemicroservice.repository.OrderRepository;
 import com.microforce.commandemicroservice.service.OrderService;
@@ -73,6 +74,18 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
         return orderMapper.ToOrderResponse(order);
+    }
+
+    @Override
+    public void deleteOrder(UUID id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+
+        if (order.getStatus() == OrderStatus.PENDING || order.getStatus() == OrderStatus.CANCELED) {
+            orderRepository.delete(order);
+        } else {
+            throw new OrderDeletionException("Cannot delete order with status: " + order.getStatus());
+        }
     }
 
 }
