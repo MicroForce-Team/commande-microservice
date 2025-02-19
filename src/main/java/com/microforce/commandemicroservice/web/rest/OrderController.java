@@ -1,6 +1,7 @@
 package com.microforce.commandemicroservice.web.rest;
 
 import com.microforce.commandemicroservice.DTO.OrderRequest;
+import com.microforce.commandemicroservice.DTO.OrderResponse;
 import com.microforce.commandemicroservice.domain.entities.Order;
 import com.microforce.commandemicroservice.service.OrderService;
 import jakarta.validation.Valid;
@@ -19,8 +20,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody @Valid OrderRequest orderRequest) {
-        Order createdOrder = orderService.createOrder(orderRequest);
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody @Valid OrderRequest orderRequest) {
+        OrderResponse createdOrder = orderService.createOrder(orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 }

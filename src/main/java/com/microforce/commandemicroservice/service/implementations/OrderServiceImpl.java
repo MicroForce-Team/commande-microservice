@@ -2,7 +2,9 @@ package com.microforce.commandemicroservice.service.implementations;
 
 
 
+import com.microforce.commandemicroservice.DTO.OrderMapper;
 import com.microforce.commandemicroservice.DTO.OrderRequest;
+import com.microforce.commandemicroservice.DTO.OrderResponse;
 import com.microforce.commandemicroservice.domain.entities.Delivery;
 import com.microforce.commandemicroservice.domain.entities.Order;
 import com.microforce.commandemicroservice.domain.entities.OrderItem;
@@ -24,10 +26,11 @@ import java.util.UUID;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     @Override
     @Transactional
-    public Order createOrder(OrderRequest orderRequest) {
+    public OrderResponse createOrder(OrderRequest orderRequest) {
 
         Order order = Order.builder()
                 .userId(orderRequest.getUserId())
@@ -52,8 +55,8 @@ public class OrderServiceImpl implements OrderService {
 
         order.setDelivery(delivery);
 
-        return  orderRepository.save(order);
-
+        Order savedOrder =   orderRepository.save(order);
+        return orderMapper.ToOrderResponse(savedOrder);
     }
 
 }
