@@ -10,9 +10,12 @@ import com.microforce.commandemicroservice.domain.entities.Order;
 import com.microforce.commandemicroservice.domain.entities.OrderItem;
 import com.microforce.commandemicroservice.domain.enums.DeliveryStatus;
 import com.microforce.commandemicroservice.domain.enums.OrderStatus;
+import com.microforce.commandemicroservice.exception.OrderNotFoundException;
 import com.microforce.commandemicroservice.repository.OrderRepository;
 import com.microforce.commandemicroservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +60,19 @@ public class OrderServiceImpl implements OrderService {
 
         Order savedOrder =   orderRepository.save(order);
         return orderMapper.ToOrderResponse(savedOrder);
+    }
+
+    @Override
+    public Page<OrderResponse> getAllOrders(Pageable pageable) {
+        Page<Order> ordersPage = orderRepository.findAll(pageable);
+        return ordersPage.map(orderMapper::ToOrderResponse);
+    }
+
+    @Override
+    public OrderResponse getOrderById(UUID id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+        return orderMapper.ToOrderResponse(order);
     }
 
 }
