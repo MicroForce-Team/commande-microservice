@@ -2,15 +2,21 @@ package com.microforce.commandemicroservice.service.implementations;
 
 
 
+import com.microforce.commandemicroservice.DTO.OrderMapper;
 import com.microforce.commandemicroservice.DTO.OrderRequest;
+import com.microforce.commandemicroservice.DTO.OrderResponse;
 import com.microforce.commandemicroservice.domain.entities.Delivery;
 import com.microforce.commandemicroservice.domain.entities.Order;
 import com.microforce.commandemicroservice.domain.entities.OrderItem;
 import com.microforce.commandemicroservice.domain.enums.DeliveryStatus;
 import com.microforce.commandemicroservice.domain.enums.OrderStatus;
+import com.microforce.commandemicroservice.exception.OrderDeletionException;
+import com.microforce.commandemicroservice.exception.OrderNotFoundException;
 import com.microforce.commandemicroservice.repository.OrderRepository;
 import com.microforce.commandemicroservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +30,11 @@ import java.util.UUID;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     @Override
     @Transactional
-    public Order createOrder(OrderRequest orderRequest) {
+    public OrderResponse createOrder(OrderRequest orderRequest) {
 
         Order order = Order.builder()
                 .userId(orderRequest.getUserId())
@@ -37,10 +44,10 @@ public class OrderServiceImpl implements OrderService {
                 .orderItems(new ArrayList<OrderItem>())
                 .build();
 
-        long totalAmount = 0;
+        long totalAmount = 0L;
         for (OrderItem item : orderRequest.getOrderItems()) {
             order.addOrderItem(item);
-            totalAmount += item.getSubtotal();
+            totalAmount += (item.getPrice() * item.getQuantity());
         }
         order.setTotalAmount(totalAmount);
 
@@ -52,8 +59,33 @@ public class OrderServiceImpl implements OrderService {
 
         order.setDelivery(delivery);
 
-        return  orderRepository.save(order);
+        Order savedOrder =   orderRepository.save(order);
+        return orderMapper.ToOrderResponse(savedOrder);
+    }
 
+    @Override
+    public Page<OrderResponse> getAllOrders(Pageable pageable) {
+        Page<Order> ordersPage = orderRepository.findAll(pageable);
+        return ordersPage.map(orderMapper::ToOrderResponse);
+    }
+
+    @Override
+    public OrderResponse getOrderById(UUID id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+        return orderMapper.ToOrderResponse(order);
+    }
+
+    @Override
+    public void deleteOrder(UUID id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+
+        if (order.getStatus() == OrderStatus.PENDING || order.getStatus() == OrderStatus.CANCELED) {
+            orderRepository.delete(order);
+        } else {
+            throw new OrderDeletionException("Cannot delete order with status: " + order.getStatus());
+        }
     }
 
 }
